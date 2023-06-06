@@ -1,0 +1,85 @@
+/* style.css - is what determines the 'style' of the website and pages that are linked */
+
+/* Any elements that use the below variables will have the specified color */
+:root {
+    --borderColor: black;
+    --bodyColor: purple;
+    --buttonColor: white;
+    --hoverColor: green;
+    --correctAnswer: green;
+    --incorrectAnswer: red;
+}
+
+/* Webpage will have background color as specified */
+body{
+    background-color: var(--bodyColor);
+}
+
+/* Settings for any elements using 'Button' class */
+.Button{
+    position: relative;
+    top: 50%;
+    left: 50%;
+    margin-bottom: 20px;
+    margin-left: 10px;
+    transform: translate(-50%, -50%);
+    padding: 8px 45px;
+    border: 3px solid var(--borderColor);
+    background-color: var(--buttonColor);
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    cursor: pointer;
+}
+
+/* Hover over Buttons */
+.Button:hover{
+    background-color: var(--hoverColor);
+}
+
+/* When Buttons are active */
+.Button:active{
+    opacity: 0.80;
+}
+
+/* Element settings when uisng HighScore */
+#HighScore {
+    height: 50px;
+    width: 272px;
+    background-color: var(--bodyColor);
+    float: left;
+}
+
+/* Settings for when initials is used */
+#initials {
+    padding: 0 4px;
+    margin: 0 8px;
+}
+
+/* Settings when startGame is used for webpage */
+#startGame {
+    display: initial;
+    border: 3px solid var(--borderColor);
+    background-color: var(--buttonColor);
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    padding: 8px 45px;
+    margin: 20px;
+    cursor: pointer;
+}
+
+/* When hovering over using startGame */
+#startGame:hover{
+    background-color: var(--hoverColor);
+}
+
+/* Time Window will use the below settings */
+#TimeWindow {
+    height: 50px;
+    width: 350px;
+    background-color: var(--bodyColor);
+    float: right;
+    margin-right: -75px;
+    text-align: center;
+    padding: 12px 0px;
+    color: var(--buttonColor);
+}
