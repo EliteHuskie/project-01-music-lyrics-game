@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Head section that holds the 'meta' and 'link' tags -->
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="./assets/css/reset.css" />
+    <link rel="stylesheet" type="text/css" href="./assets/css/style.css" />
+    <title>Coding Quiz Game</title>
+</head>
+<body>
+<!-- High Score section with link to the associated html file -->
+    <section>
+        <div id="HighScore">
+            <a href="./assets/high-scores.html"><button class="Button">View Highscores</button></a>
+        </div>
+<!-- Time Window and the text that will display on the webpage -->
+        <div id="TimeWindow">
+            <h1>Time Left: <span id="timeLeft"></span></h1>
+        </div>
+    </section>
+<!-- Quiz Game where a paragraph is present to introduce the game and the 'Start Game' button visible to users -->
+    <section class="quizGame">
+        <p id="game-paragraph">Welcome to the JavaScript quiz game! Click the button below to begin the questions when you're ready. Good luck, have fun and try to achieve the high score!</p>
+        <button id="startGame">Start Game</button>
+        <h1 id="quizQuestion"></h1>
+        <ul id="quizChoices"></ul>
+    </section>
+<!-- Scripts for Question Bank and the main JS Script for the Coding Quiz Game -->
+    <script src="./assets/js/question-bank.js"></script>
+    <script src="./assets/js/script.js"></script>
+</body>
+</html>
