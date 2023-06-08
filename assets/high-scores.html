@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Head section that holds the 'meta' and 'link' tags -->
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="./css/reset.css" />
+    <link rel="stylesheet" type="text/css" href="./css/style.css" />
+    <title>High Scores</title>
+</head>
+<body>
+    <section>
+<!-- High Score section with link to the index html file to take you back to main page -->
+        <div id="HighScore">
+            <a href="../index.html"><button class="Button">Return to Game</button></a>
+<!-- Scores can be cleared using button if needed -->
+            <button id="clearScoresButton" class="Button">Clear Scores</button>
+        </div>
+    </section>
+<!-- Quiz game section using appropriate class -->
+    <section class="quizGame">
+    </section>
+<!-- Scripts for quiz-questions + user scores -->
+    <script src="./js/quiz-questions.js"></script>
+    <script src="./js/user-scores.js"></script>
+</body>
+</html>
