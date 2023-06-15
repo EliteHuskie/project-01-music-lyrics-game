@@ -63,42 +63,55 @@ if (authorizationCode) {
     //console.log(error);
  // });
 
-//these two lines convert the string words of the lyrics_body provided from 
-//the API as well as the users guesses into arrays
-//const user_lyrics_input = user_input.split(" ");
-//const lyrics_array = lyrics_body.split(" ");
+ //This code displays each word of the lyrics retreaved from the API
+ //and displays everything except 8 words
+ const lyricsBody = jsonResponse.message.body.lyrics.lyrics_body;
+ const lyricsArray = lyricsBody.split(' ');
+ 
+ //needs the HTML element to be proper!!!!!!!!!!!!!!!!!!!!!!!
+ const container = document.getElementById('lyricsContainer');
+ const startIndex = 0;
+ const endIndex = lyricsArray.length - 8;
+ let currentIndex = startIndex;
+ 
+ function displayNextWord() {
+   if (currentIndex < endIndex) {
+     const word = lyricsArray[currentIndex];
+     const wordElement = document.createElement('span');
+     wordElement.textContent = word + ' ';
+     container.appendChild(wordElement);
+     currentIndex++;
+   }
+ }
+ 
+ setInterval(displayNextWord, 50); 
 
-//calculates the percentage of words guessed correctly
-//let words_correct = 0;
-//let words_incorrect = 0;
-//let words_entered = words_incorrect + words_correct;
-//let scorePercentage = ((words_correct/words_entered) * 100);
+ //This function turns the users imput into an array 
 
-//compares the lyrics of the user and the lyrics of the song, 
-// and prints green or red depending on whether they match
-//for (let i = 0; i < user_lyrics_input.length; i++) {
-  //  if (user_lyrics_input[i] === actual_lyrics[i]) {
-    //    user_lyrics_input[i].style.color = "green";
-      //  words_correct++
-        
-    //} else {
-      //  user_lyrics_input[i].style.color = "red";
-        //words_incorrect++
-    //}
-//};
+ let user_lyrics_guess = [];
 
-//const outputElement = document.getElementById("Lyricscroll");
-//let Lyrics_body_Index = 0;
-//function lyricScroll () {
-  //  if (Lyrics_body_Index < lyrics_array)
-    //outputElement.textContent = array[lyrics_array];
-    //Lyrics_body_Index++;
-//}
+ //needs the HTML element to be proper!!!!!!!!!!!!!!!!!!!!!!
+ function convertInputToArray() {
+  const inputText = document.getElementById('inputTextbox').value;
+  user_lyrics_guess.push(...inputText.split(' '));
+  console.log(user_lyrics_guess);
+}
 
-//we need to append the lyrics from the lyrics body given by 
-//the API to the actual_lyrics array and then print that out
-//at the same rate as the song is singing them
+const lastEightWords = lyricsArray.slice(-8);
 
-//if we use a for loop, we can keep track of the 
-//indexs of the array so that the comparison function
-//knows which indexs to compare. 
+//needs the HTML element to be proper!!!!!!!!!!!!!!!!!!!!!!!
+function compareWords() {
+  const userInput = document.getElementById('inputTextbox').value;
+  const userArray = userInput.split(' ');
+
+  const result = lyricsArray.map((word) => {
+    if (lastEightWords.includes(word)) {
+      return '<span style="color: green;">' + word + '</span>';
+    } else {
+      return '<span style="color: red;">' + word + '</span>';
+    }
+  });
+
+  const displayElement = document.getElementById('displayText');
+  displayElement.innerHTML = result.join(' ');
+}
