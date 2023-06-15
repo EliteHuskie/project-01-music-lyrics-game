@@ -1,6 +1,5 @@
-// Start of Spotify Web API ------------------------
-const clientId = '65db5ee62bd54c539ab09c21d723eec3';
-const clientSecret = 'dd48590eba584fa4b97c4f25d91dffad';
+const clientId = 'placeholder';
+const clientSecret = 'placeholder';
 const redirectUri = 'https://elitehuskie.github.io/project-01-music-lyrics-game/';
 
 // Function to initiate the authentication process
@@ -27,17 +26,17 @@ function handleAuthorizationCode(code) {
       redirectUri: redirectUri
     })
   })
-  .then(response => response.json())
-  .then(data => {
-    // Handle the response from your server-side endpoint
-    const accessToken = data.access_token;
-    const expiresIn = data.expires_in;
-    console.log(accessToken)
-    // Perform further actions with the access token, such as making API requests
-  })
-  .catch(error => {
-    console.error('Error exchanging authorization code:', error);
-  });
+    .then(response => response.json())
+    .then(data => {
+      // Handle the response from your server-side endpoint
+      const accessToken = data.access_token;
+      const expiresIn = data.expires_in;
+      console.log(accessToken);
+      // Perform further actions with the access token, such as making API requests
+    })
+    .catch(error => {
+      console.error('Error exchanging authorization code:', error);
+    });
 }
 
 // Code to handle the callback from the Spotify authorization flow
@@ -47,8 +46,8 @@ const authorizationCode = urlParams.get('code');
 if (authorizationCode) {
   handleAuthorizationCode(authorizationCode);
 }
-// Start of MusixMatch API -----------------------
-const apiKey = '3be68bfc0da7e2c5a81fff0c26329572';
+
+const apiKey = '123';
 const trackId = '31409936';
 
 fetch(`https://api.musixmatch.com/ws/1.1/track.lyrics.get?track_id=${trackId}&apikey=${apiKey}`)
@@ -69,10 +68,12 @@ const player = {
 
 // These two lines convert the string words of the lyrics_body provided from
 // the API as well as the user's guesses into arrays
+const user_input = ''; // Define user_input variable and assign the appropriate value
+const lyrics_body = ''; // Define lyrics_body variable and assign the appropriate value
+
 const user_lyrics_input = user_input.split(' ');
 const lyrics_array = lyrics_body.split(' ');
 
-// Calculates the percentage of words guessed correctly
 let words_correct = 0;
 let words_incorrect = 0;
 
@@ -102,6 +103,8 @@ const outputElement = document.getElementById('Lyricscroll');
 outputElement.innerHTML = styled_lyrics;
 
 let Lyrics_body_Index = 0;
+
+// Function to scroll through the lyrics
 function lyricScroll() {
   if (Lyrics_body_Index < lyrics_array.length) {
     outputElement.textContent = lyrics_array[Lyrics_body_Index];
