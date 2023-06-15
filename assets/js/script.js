@@ -1,8 +1,5 @@
-//never gonna give you up, never gonna let you down! 
-//GET RICK ROLLED SON!!
-
-const clientId = '65db5ee62bd54c539ab09c21d723eec3';
-const clientSecret = 'dd48590eba584fa4b97c4f25d91dffad';
+const clientId = 'placeholder';
+const clientSecret = 'placeholder';
 const redirectUri = 'https://elitehuskie.github.io/project-01-music-lyrics-game/';
 
 // Function to initiate the authentication process
@@ -29,17 +26,17 @@ function handleAuthorizationCode(code) {
       redirectUri: redirectUri
     })
   })
-  .then(response => response.json())
-  .then(data => {
-    // Handle the response from your server-side endpoint
-    const accessToken = data.access_token;
-    const expiresIn = data.expires_in;
-    console.log(accessToken)
-    // Perform further actions with the access token, such as making API requests
-  })
-  .catch(error => {
-    console.error('Error exchanging authorization code:', error);
-  });
+    .then(response => response.json())
+    .then(data => {
+      // Handle the response from your server-side endpoint
+      const accessToken = data.access_token;
+      const expiresIn = data.expires_in;
+      console.log(accessToken);
+      // Perform further actions with the access token, such as making API requests
+    })
+    .catch(error => {
+      console.error('Error exchanging authorization code:', error);
+    });
 }
 
 // Code to handle the callback from the Spotify authorization flow
@@ -50,18 +47,8 @@ if (authorizationCode) {
   handleAuthorizationCode(authorizationCode);
 }
 
-//const apiKey = '3be68bfc0da7e2c5a81fff0c26329572';
-//const trackId = '31409936'; 
-//fetch(`https://api.musixmatch.com/ws/1.1/track.lyrics.get?track_id=${trackId}&apikey=${apiKey}`)
-  //.then(response => response.json())
-  //.then(data => {
-    
- //console.log(data);
-  //})
- // .catch(error => {
-    
-    //console.log(error);
- // });
+const apiKey = '123';
+const trackId = '31409936';
 
  //This code displays each word of the lyrics retreaved from the API
  //and displays everything except 8 words
