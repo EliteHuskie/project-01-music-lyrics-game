@@ -15,10 +15,47 @@
     <section class="box">
 
         <h1 class="title has-text-centered has-text-primary has-background-primary-light">Lyric Lord</h1>
+        <button id="togglePlay">Toggle Play</button>
 
-        <section id="Musicplayer">
-            <!-- Content for Musicplayer section -->
-        </section>
+    <script src="https://sdk.scdn.co/spotify-player.js"></script>
+    <script>
+        window.onSpotifyWebPlaybackSDKReady = () => {
+            const token = "BQA9FBL-SSOBecXAtGwk61xBA0AVkS3y463S34ygIQkVi24gwLUzyAnX-nPXU114k31K3W2reBlWZrc7wNrI8YEhVDL_hhjR4c2rUj3K7x9Of3T3d4p6gOAr1sbUylduUXdoueo6YtJ2-tRtwkrUDHPsi9l1RVI4-60JK9ehvxSPCLBu0zQZnobqj45VOlegxOuMw6BqTx1TVYErAt81F4kHBeTb";
+            const player = new Spotify.Player({
+                name: 'Web Playback SDK Quick Start Player',
+                getOAuthToken: cb => { cb(token); },
+                volume: 0.5
+            });
+
+            // Ready
+            player.addListener('ready', ({ device_id }) => {
+                console.log('Ready with Device ID', device_id);
+            });
+
+            // Not Ready
+            player.addListener('not_ready', ({ device_id }) => {
+                console.log('Device ID has gone offline', device_id);
+            });
+
+            player.addListener('initialization_error', ({ message }) => {
+                console.error(message);
+            });
+
+            player.addListener('authentication_error', ({ message }) => {
+                console.error(message);
+            });
+
+            player.addListener('account_error', ({ message }) => {
+                console.error(message);
+            });
+
+            document.getElementById('togglePlay').onclick = function() {
+              player.togglePlay();
+            };
+
+            player.connect();
+        }
+    </script>
 
         <section id="Lyricscroll">
             <!-- Content for Lyricscroll section -->
