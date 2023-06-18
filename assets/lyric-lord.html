@@ -92,19 +92,12 @@
     <button id="togglePlay">Toggle Play</button>
 
     <script src="https://sdk.scdn.co/spotify-player.js"></script>
-    
         
-        <section id="Lyricscroll">
-            <!-- Content for Lyricscroll section -->
-        </section>
+    <input id="inputTextbox" class="input is-rounded is-primary is-centered" type="text" placeholder="Enter lyrics here" onkeydown="handleKeyDown(event)">
+    
+    <section id="displayText"></section>
 
-        <input class="input is-rounded is-primary is-centered" type="text" placeholder="Enter lyrics here">
-
-        <section id="lyricconfirm">
-            <!-- Content for lyricconfirm section -->
-        </section>
     </section>
- 
     <script src="./js/script.js"></script>
 </body>
 </html>
