@@ -420,7 +420,7 @@ function highlightWords() {
     const word = words[i];
     const userWord = user_lyrics_guess[i] || ''; // Get the corresponding user input word or an empty string if it doesn't exist
 
-    if (userWord.trim() === word.textContent.trim()) {
+    if (userWord.trim().toLowerCase() === word.textContent.trim().toLowerCase()) {
       word.style.color = 'green';
     } else {
       word.style.color = 'red';
@@ -457,7 +457,7 @@ function retrieveLyrics() {
       const lyricsWithoutNewlines = lyricsBody.replace(/\n/g, ' ');
 
       lyricsArray = lyricsWithoutNewlines.split(' ');
-      endIndex = Math.min(lyricsArray.length, 10); // Limit to the first 10 words
+      endIndex = Math.min(lyricsArray.length, 13); // Limit to the first 13 words
       lyricsRetrieved = true; // Set the flag to true
     })
     .catch(error => {
@@ -471,7 +471,11 @@ function compareWords() {
   const userGuess = user_lyrics_guess.slice(0, endIndex);
 
   const wordsWrong = lastTenWords.reduce((count, word, index) => {
-    if (userGuess[index] !== word && userGuess[index] !== word.replace(/\n/g, '')) {
+    const userWord = userGuess[index] || ''; // Get the corresponding user input word or an empty string if it doesn't exist
+
+    if (
+      userWord.trim().toLowerCase() !== word.trim().toLowerCase()
+    ) {
       return count + 1;
     }
     return count;
@@ -532,8 +536,8 @@ if (inputTextbox) {
       const inputText = inputTextbox.value;
       user_lyrics_guess = inputText.split(' ');
 
-      // Keep only the last 10 words of user's guess
-      user_lyrics_guess = user_lyrics_guess.slice(-10);
+      // Keep only the last 13 words of the user's guess
+      user_lyrics_guess = user_lyrics_guess.slice(-13);
 
       // Compare user input with lyrics and calculate score
       const { score, wordsWrong, totalWords } = compareWords();
