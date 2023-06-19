@@ -400,60 +400,161 @@ function addRadioButton(item, index){
 
             player.connect();
         }
- 
 
-const apiKey = '123';
+// Start of Musixmatch API
+// Variables for apiKey and trackID
+const apiKey = '3be68bfc0da7e2c5a81fff0c26329572';
 const trackId = '31409936';
+let lyricsArray = [];
+let currentIndex = 0;
+let endIndex = 0;
+let user_lyrics_guess = [];
+let lyricsRetrieved = false; // Flag to track if lyrics have been retrieved
 
- //This code displays each word of the lyrics retreaved from the API
- //and displays everything except 8 words
- const lyricsBody = jsonResponse.message.body.lyrics.lyrics_body;
- const lyricsArray = lyricsBody.split(' ');
- 
- //needs the HTML element to be proper!!!!!!!!!!!!!!!!!!!!!!!
- const container = document.getElementById('lyricsContainer');
- const startIndex = 0;
- const endIndex = lyricsArray.length - 8;
- let currentIndex = startIndex;
- 
- function displayNextWord() {
-   if (currentIndex < endIndex) {
-     const word = lyricsArray[currentIndex];
-     const wordElement = document.createElement('span');
-     wordElement.textContent = word + ' ';
-     container.appendChild(wordElement);
-     currentIndex++;
-   }
- }
- 
- setInterval(displayNextWord, 50); 
+// Function to highlight words based on correctness
+function highlightWords() {
+  const displayElement = document.getElementById('displayText');
+  const words = displayElement.getElementsByTagName('span');
 
- //This function turns the users imput into an array 
+  for (let i = 0; i < words.length; i++) {
+    const word = words[i];
+    const userWord = user_lyrics_guess[i] || ''; // Get the corresponding user input word or an empty string if it doesn't exist
 
- let user_lyrics_guess = [];
-
- //needs the HTML element to be proper!!!!!!!!!!!!!!!!!!!!!!
- function convertInputToArray() {
-  const inputText = document.getElementById('inputTextbox').value;
-  user_lyrics_guess.push(...inputText.split(' '));
-  console.log(user_lyrics_guess);
+    if (userWord.trim() === word.textContent.trim()) {
+      word.style.color = 'green';
+    } else {
+      word.style.color = 'red';
+    }
+  }
 }
 
-const lastEightWords = lyricsArray.slice(-8);
+// Function to display lyrics on the page
+function displayLyrics() {
+  const displayElement = document.getElementById('displayText');
+  displayElement.innerHTML = lyricsArray
+    .slice(0, endIndex)
+    .map(word => `<span>${word}</span>`)
+    .join(' ');
 
-//needs the HTML element to be proper!!!!!!!!!!!!!!!!!!!!!!!
+  // Show the lyrics element
+  displayElement.style.display = 'block';
+}
+
+// Make the API request to retrieve lyrics
+function retrieveLyrics() {
+  const url = `https://proxy.cors.sh/https://api.musixmatch.com/ws/1.1/track.lyrics.get?track_id=${trackId}&apikey=${apiKey}`;
+
+  fetch(url, {
+    headers: {
+      'x-cors-api-key': 'temp_8587e07d4da904fa8673aa9008ec635d',
+    },
+  })
+    .then(response => response.json())
+    .then(data => {
+      const lyricsBody = data.message.body.lyrics.lyrics_body;
+
+      // Remove newline characters from lyrics
+      const lyricsWithoutNewlines = lyricsBody.replace(/\n/g, ' ');
+
+      lyricsArray = lyricsWithoutNewlines.split(' ');
+      endIndex = Math.min(lyricsArray.length, 10); // Limit to the first 10 words
+      lyricsRetrieved = true; // Set the flag to true
+
+      // Display the lyrics on the page
+      displayLyrics();
+    })
+    .catch(error => {
+      console.log('Fetch Error:', error);
+    });
+}
+
+// Function to compare user input with lyrics and update scores
 function compareWords() {
-  const userInput = document.getElementById('inputTextbox').value;
-  const userArray = userInput.split(' ');
+  const lastTenWords = lyricsArray.slice(0, endIndex);
+  const userGuess = user_lyrics_guess.slice(0, endIndex);
 
-  const result = lyricsArray.map((word) => {
-    if (lastEightWords.includes(word)) {
-      return '<span style="color: green;">' + word + '</span>';
-    } else {
-      return '<span style="color: red;">' + word + '</span>';
+  const wordsWrong = lastTenWords.reduce((count, word, index) => {
+    if (userGuess[index] !== word && userGuess[index] !== word.replace(/\n/g, '')) {
+      return count + 1;
+    }
+    return count;
+  }, 0);
+
+  const totalWords = lastTenWords.length;
+
+  const score = Math.round(((totalWords - wordsWrong) / totalWords) * 100 * 100) / 100;
+
+  // Save score to local storage
+  const scores = JSON.parse(localStorage.getItem('scores')) || [];
+  const urlParams = new URLSearchParams(window.location.search);
+  const scoreValue = urlParams.get('score');
+  scores.push(scoreValue);
+  localStorage.setItem('scores', JSON.stringify(scores));
+
+  // Update high scores display
+  updateHighScores(score);
+
+  return { score, wordsWrong, totalWords };
+}
+
+// Event listener for the "Finish Game" button
+const finishGameButton = document.getElementById('finishGame');
+finishGameButton.addEventListener('click', function () {
+  // Compare user input with lyrics and calculate score
+  const { score } = compareWords();
+
+  // Redirect to the high-scores page with the score as a query parameter
+  window.location.href = `high-scores.html?score=${score}`;
+});
+
+// Check if the input element exists before adding the event listener
+const inputTextbox = document.getElementById('inputTextbox');
+if (inputTextbox) {
+  // Add event listener for keydown event on the input element
+  inputTextbox.addEventListener('keydown', function (event) {
+    if (event.key === 'Enter') {
+      event.preventDefault(); // Prevent the default behavior of the Enter key
+
+      if (!lyricsRetrieved) {
+        console.log('Lyrics have not been retrieved yet');
+        return;
+      }
+
+      const inputText = inputTextbox.value;
+      user_lyrics_guess = inputText.split(' ');
+
+      // Keep only the last 10 words of user's guess
+      user_lyrics_guess = user_lyrics_guess.slice(-10);
+
+      // Compare user input with lyrics and calculate score
+      const { score, wordsWrong, totalWords } = compareWords();
+      updateHighScores(score);
+
+      // Clear the input textbox after processing
+      inputTextbox.value = '';
+
+      // Highlight the words based on correctness
+      highlightWords();
+
+      // Check if the user has completed the lyrics (reached the end)
+      if (currentIndex >= endIndex) {
+        // Show the "Finish Game" button
+        finishGameButton.style.display = 'block';
+      }
     }
   });
-
-  const displayElement = document.getElementById('displayText');
-  displayElement.innerHTML = result.join(' ');
 }
+
+// Function to update high scores page with the score
+function updateHighScores(score) {
+  const scoreDisplay = document.getElementById('scoreDisplay');
+  if (scoreDisplay) {
+    scoreDisplay.textContent = `Score: ${score}%`;
+  }
+}
+
+// Call the function to update the high scores display
+updateHighScores();
+
+// Call the function to retrieve lyrics
+retrieveLyrics();
