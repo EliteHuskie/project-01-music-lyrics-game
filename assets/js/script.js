@@ -403,6 +403,8 @@ function addRadioButton(item, index){
  
 // Start of Musixmatch API
 // Variables for apiKey and trackID
+// Start of Musixmatch API
+// Variables for apiKey and trackID
 const apiKey = '3be68bfc0da7e2c5a81fff0c26329572';
 const trackId = '31409936';
 let lyricsArray = [];
@@ -441,9 +443,11 @@ function retrieveLyrics() {
     .then(response => response.json())
     .then(data => {
       const lyricsBody = data.message.body.lyrics.lyrics_body;
-      lyricsArray = lyricsBody.split(' ');
+      const cleanedLyricsBody = lyricsBody.replace(/\s+/g, ' ').trim(); // Remove extra spaces and trim leading/trailing spaces
+      lyricsArray = cleanedLyricsBody.split(' '); // Split on spaces
       endIndex = Math.min(lyricsArray.length, 10); // Limit to the first 10 words
       lyricsRetrieved = true; // Set the flag to true
+      setInterval(displayNextWord, 50);
     })
     .catch(error => {
       console.log('Fetch Error:', error);
