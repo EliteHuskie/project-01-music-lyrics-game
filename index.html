@@ -1,34 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- Head section that holds the 'meta' and 'link' tags -->
+<!-- Metadata + Links -->
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="./assets/css/reset.css" />
-    <link rel="stylesheet" type="text/css" href="./assets/css/style.css" />
-    <title>Coding Quiz Game</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" />
+    <title>Welcome to Lyric Lord!</title>
 </head>
-<body>
-<!-- High Score section with link to the associated html file -->
-    <section>
-        <div id="HighScore">
-            <a href="./assets/high-scores.html"><button class="Button">View Highscores</button></a>
+<!-- Body with class for background -->
+<body class="box has-background-primary-dark">
+<!-- Section using classes for header, paragraph -->
+    <section class="box">
+        <h1 class="title has-text-centered has-text-primary has-background-primary-light">Lyric Lord</h1>
+        <p class="subtitle has-text-centered has-text-primary">Welcome to Lyric Lord! The Lyric matching game that tests your ears and memory!</p>
+        <div class="buttons is-centered">
+<!-- Links to Quizpage and Highscores pages -->
+        <a href="./assets/lyric-lord.html"><button class="button is-success is-large is-rounded is-active">Start Game</button></a>
+        <a href="./assets/high-scores.html"><button class="button is-success is-large is-rounded is-active">View Highscores</button></a>
         </div>
-<!-- Time Window and the text that will display on the webpage -->
-        <div id="TimeWindow">
-            <h1>Time Left: <span id="timeLeft"></span></h1>
-        </div>
-    </section>
-<!-- Quiz Game where a paragraph is present to introduce the game and the 'Start Game' button visible to users -->
-    <section class="quizGame">
-        <p id="game-paragraph">Welcome to the JavaScript quiz game! Click the button below to begin the questions when you're ready. Good luck, have fun and try to achieve the high score!</p>
-        <button id="startGame">Start Game</button>
-        <h1 id="quizQuestion"></h1>
-        <ul id="quizChoices"></ul>
-    </section>
-<!-- Scripts for Question Bank and the main JS Script for the Coding Quiz Game -->
-    <script src="./assets/js/question-bank.js"></script>
-    <script src="./assets/js/script.js"></script>
+    </section>  
+    <script src="./js/script.js"></script> 
 </body>
 </html>
