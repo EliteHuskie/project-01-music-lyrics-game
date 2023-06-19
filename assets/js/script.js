@@ -365,10 +365,10 @@ function addRadioButton(item, index){
 }
 
         window.onSpotifyWebPlaybackSDKReady = () => {
-            const token = 'https://accounts.spotify.com/api/token';
+            const token = 'access_token';
             const player = new Spotify.Player({
                 name: 'Web Playback SDK Quick Start Player',
-                getOAuthToken: cb => { cb(token); },
+                getOAuthToken: callback => { callback(token); },
                 volume: 0.5
             });
 
@@ -401,73 +401,53 @@ function addRadioButton(item, index){
             player.connect();
         }
  
-// Start of Musixmatch API
-// Variables for apiKey and trackID
-// Start of Musixmatch API
-// Variables for apiKey and trackID
-const apiKey = '3be68bfc0da7e2c5a81fff0c26329572';
+
+const apiKey = '123';
 const trackId = '31409936';
-let lyricsArray = [];
-let currentIndex = 0;
-let endIndex = 0;
-let user_lyrics_guess = [];
-let lyricsRetrieved = false; // Flag to track if lyrics have been retrieved
 
-// Function to display lyrics
-function displayLyrics() {
-  const displayElement = document.getElementById('displayText');
-  displayElement.innerHTML = ''; // Clear the display element
+ //This code displays each word of the lyrics retreaved from the API
+ //and displays everything except 8 words
+ const lyricsBody = jsonResponse.message.body.lyrics.lyrics_body;
+ const lyricsArray = lyricsBody.split(' ');
+ 
+ //needs the HTML element to be proper!!!!!!!!!!!!!!!!!!!!!!!
+ const container = document.getElementById('lyricsContainer');
+ const startIndex = 0;
+ const endIndex = lyricsArray.length - 8;
+ let currentIndex = startIndex;
+ 
+ function displayNextWord() {
+   if (currentIndex < endIndex) {
+     const word = lyricsArray[currentIndex];
+     const wordElement = document.createElement('span');
+     wordElement.textContent = word + ' ';
+     container.appendChild(wordElement);
+     currentIndex++;
+   }
+ }
+ 
+ setInterval(displayNextWord, 50); 
 
-  for (let i = 0; i < lyricsArray.length; i++) {
-    const word = lyricsArray[i];
-    const wordElement = document.createElement('span');
-    if (i < endIndex && user_lyrics_guess[i] === word) {
-      wordElement.style.color = 'green';
-    } else {
-      wordElement.style.color = 'red';
-    }
-    wordElement.textContent = word + ' ';
-    displayElement.appendChild(wordElement);
-  }
-}
+ //This function turns the users imput into an array 
 
-// Make the API request to retrieve lyrics
-function retrieveLyrics() {
-  const url = `https://proxy.cors.sh/https://api.musixmatch.com/ws/1.1/track.lyrics.get?track_id=${trackId}&apikey=${apiKey}`;
+ let user_lyrics_guess = [];
 
-  fetch(url, {
-    headers: {
-      'x-cors-api-key': 'temp_8587e07d4da904fa8673aa9008ec635d',
-    }
-  })
-    .then(response => response.json())
-    .then(data => {
-      const lyricsBody = data.message.body.lyrics.lyrics_body;
-      const cleanedLyricsBody = lyricsBody.replace(/\s+/g, ' ').trim(); // Remove extra spaces and trim leading/trailing spaces
-      lyricsArray = cleanedLyricsBody.split(' '); // Split on spaces
-      endIndex = Math.min(lyricsArray.length, 10); // Limit to the first 10 words
-      lyricsRetrieved = true; // Set the flag to true
-      setInterval(displayNextWord, 50);
-    })
-    .catch(error => {
-      console.log('Fetch Error:', error);
-    });
-}
-
-// Function to convert user input into an array
-function convertInputToArray() {
-  if (!lyricsRetrieved) return; // Exit if lyrics have not been retrieved yet
-  
+ //needs the HTML element to be proper!!!!!!!!!!!!!!!!!!!!!!
+ function convertInputToArray() {
   const inputText = document.getElementById('inputTextbox').value;
-  user_lyrics_guess = inputText.split(' ');
+  user_lyrics_guess.push(...inputText.split(' '));
+  console.log(user_lyrics_guess);
 }
 
-// Function to compare user input with lyrics
-function compareWords() {
-  const lastTenWords = lyricsArray.slice(0, endIndex);
+const lastEightWords = lyricsArray.slice(-8);
 
-  const result = lastTenWords.map((word, index) => {
-    if (user_lyrics_guess.includes(word)) {
+//needs the HTML element to be proper!!!!!!!!!!!!!!!!!!!!!!!
+function compareWords() {
+  const userInput = document.getElementById('inputTextbox').value;
+  const userArray = userInput.split(' ');
+
+  const result = lyricsArray.map((word) => {
+    if (lastEightWords.includes(word)) {
       return '<span style="color: green;">' + word + '</span>';
     } else {
       return '<span style="color: red;">' + word + '</span>';
@@ -477,28 +457,3 @@ function compareWords() {
   const displayElement = document.getElementById('displayText');
   displayElement.innerHTML = result.join(' ');
 }
-
-// Add event listener for keydown event on the input element
-const inputTextbox = document.getElementById('inputTextbox');
-let userStartedTyping = false; // Flag to track if the user has started typing
-inputTextbox.addEventListener('keydown', function (event) {
-  if (event.key === 'Enter') {
-    event.preventDefault();
-    if (!lyricsRetrieved) {
-      retrieveLyrics();
-    } else {
-      if (userStartedTyping) {
-        convertInputToArray();
-        compareWords();
-      } else {
-        userStartedTyping = true;
-      }
-    }
-  }
-});
-
-// Call the function to retrieve lyrics after the page has loaded
-window.addEventListener('load', retrieveLyrics);
-
-// Call the function to display lyrics after the DOM content has loaded
-document.addEventListener('DOMContentLoaded', displayLyrics);
