@@ -1,5 +1,5 @@
-var client_id = "6de2bf05596b48b68ceebbbac3ae6025"; 
-var client_secret = "d0bfcdf218e945c281b4e93c1cb72e17"; 
+var client_id = ""; 
+var client_secret = ""; 
 var access_token = null;
 var refresh_token = null;
 var currentPlaylist = "";
@@ -365,7 +365,7 @@ function addRadioButton(item, index){
 }
 
         window.onSpotifyWebPlaybackSDKReady = () => {
-            const token = 'TOKEN';
+            const token = 'https://accounts.spotify.com/api/token';
             const player = new Spotify.Player({
                 name: 'Web Playback SDK Quick Start Player',
                 getOAuthToken: cb => { cb(token); },
