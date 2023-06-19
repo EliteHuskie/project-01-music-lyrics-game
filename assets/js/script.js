@@ -409,7 +409,7 @@ let lyricsArray = [];
 let currentIndex = 0;
 let endIndex = 0;
 let user_lyrics_guess = [];
-let lyricsRetrieved = false; // Flag to track if lyrics have been retrieved
+let lyricsRetrieved = true; // Flag to track if lyrics have been retrieved
 
 // Function to highlight words based on correctness
 function highlightWords() {
@@ -459,9 +459,6 @@ function retrieveLyrics() {
       lyricsArray = lyricsWithoutNewlines.split(' ');
       endIndex = Math.min(lyricsArray.length, 10); // Limit to the first 10 words
       lyricsRetrieved = true; // Set the flag to true
-
-      // Display the lyrics on the page
-      displayLyrics();
     })
     .catch(error => {
       console.log('Fetch Error:', error);
@@ -503,8 +500,17 @@ finishGameButton.addEventListener('click', function () {
   // Compare user input with lyrics and calculate score
   const { score } = compareWords();
 
-  // Redirect to the high-scores page with the score as a query parameter
-  window.location.href = `high-scores.html?score=${score}`;
+  // Open the modal to collect initials
+  openModal();
+
+  // Event listener for the "Submit" button in the modal
+  const submitInitialsButton = document.getElementById('submitInitialsButton');
+  submitInitialsButton.addEventListener('click', function () {
+    const playerInitials = initialsInput.value;
+
+    // Redirect to the high-scores page with the score and initials as query parameters
+    window.location.href = `high-scores.html?score=${score}&initials=${playerInitials}`;
+  });
 });
 
 // Check if the input element exists before adding the event listener
@@ -519,6 +525,9 @@ if (inputTextbox) {
         console.log('Lyrics have not been retrieved yet');
         return;
       }
+
+      // Display the lyrics on the page
+      displayLyrics();
 
       const inputText = inputTextbox.value;
       user_lyrics_guess = inputText.split(' ');
