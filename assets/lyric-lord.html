@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="./css/reset.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" />
+    <link rel="stylesheet" href="./css/style.css" />
     <title>Will you be the Lyric Lord?!</title>
 </head>
 <!-- Body with class for background -->
@@ -98,7 +99,17 @@
     <section id="displayText"></section>
 
     <button id="finishGame" class="button is-centered is-success is-large is-rounded is-active">Finish Game</button>
+
+  <div id="initialsModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <label for="initialsInput">Enter your initials:</label>
+      <input type="text" id="initialsInput">
+      <button id="submitInitialsButton">Submit</button>
+    </div>
+  </div>
     </section>
     <script src="./js/script.js"></script>
+    <script src="./js/modal.js"></script>
 </body>
 </html>
